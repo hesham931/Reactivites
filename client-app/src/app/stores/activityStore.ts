@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { activity } from "../models/activity";
@@ -5,7 +6,7 @@ import { activity } from "../models/activity";
 export default class ActivityStore {
     activityRegestry = new Map<string, activity>();
     selectedActivity: activity | undefined = undefined;
-    loadingInitial = true;
+    loadingInitial = false;
     submiting = false;
 
     constructor() {
@@ -87,7 +88,7 @@ export default class ActivityStore {
     }
 
     private setActivity(Activity: activity) {
-        Activity.date = Activity.date.split("T")[0];
+        Activity.date = new Date(Activity.date!);
         this.activityRegestry.set(Activity.id, Activity);
     }
 
@@ -97,7 +98,7 @@ export default class ActivityStore {
 
     get activitiesByDate() {
         return Array.from(this.activityRegestry.values()).sort((a, b) =>
-            Date.parse(a.date) - Date.parse(b.date));
+            a.date!.getTime() - b.date!.getTime());
     }
 
     get groupedActivities(){
@@ -106,7 +107,7 @@ export default class ActivityStore {
                 //activities => its the array of objects that will contain the result of type {} as {[key: string]: activity[]} key and value(date: array of activities)
                 //activity => will itreator on activities in the array
                 //console.log(activities);
-                const date = activity.date;
+                const date = format(activity.date!, 'dd MMM yyyy');
                 activities[date] = activities[date]? [...activities[date], activity]: [activity];
                 return activities;
             }, {} as {[key: string]: activity[]})
