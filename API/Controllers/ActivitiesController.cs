@@ -8,6 +8,7 @@ using Persistence;
 using MediatR;
 using Application.Activities;
 using Application.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
