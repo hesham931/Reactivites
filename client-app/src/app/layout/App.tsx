@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "semantic-ui-css/semantic.min.css";
 import "react-toastify/dist/ReactToastify.min.css"
 import { Container } from "semantic-ui-react";
@@ -13,12 +13,30 @@ import TestErrors from "../../features/errors/TestError";
 import { ToastContainer } from "react-toastify";
 import NotFoundPage from "../../features/errors/NotFoundPage";
 import ServerErrorPage from '../../features/errors/ServerErrorPage'
+import LoginForm from "../../features/users/loginForm";
+import { useStore } from "../stores/store";
+import LoadingComponent from "./LoadingComponent";
+import ModalContainer from "../common/modals/ModalContainer";
 
 function App() {
   const location = useLocation();
+  const {commonStore, userStore} = useStore();
+
+  useEffect(() => {
+    if(commonStore.token) {
+      userStore.getUser().finally(() => commonStore.setAppLoaded());
+    } else {
+      commonStore.setAppLoaded();
+    }
+  }, [commonStore, userStore])
+
+  if (!commonStore.appLoaded) <LoadingComponent content = 'Loading app...' />
+
+
   return (
     <>
-    <ToastContainer position="bottom-right" hideProgressBar />
+      <ToastContainer position="bottom-right" hideProgressBar />
+      <ModalContainer />
       <Route exact path={["/", "/home"]} component={homePage} />
       <Route
         path={"/(.+)"}
@@ -35,7 +53,8 @@ function App() {
                   component={ActivityForm}
                 />
                 <Route path="/errors" component={TestErrors} />
-                <Route path='/server-error' component={ServerErrorPage} />
+                <Route path="/server-error" component={ServerErrorPage} />
+                <Route path="/login" component={LoginForm} />
                 <Route component={NotFoundPage} />
               </Switch>
             </Container>

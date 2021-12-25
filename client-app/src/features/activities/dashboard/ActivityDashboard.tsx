@@ -14,7 +14,7 @@ export default observer(function ActivityDashboard() {
   }, [activityStore]);
 
   if (activityStore.loadingInitial)
-    return <LoadingComponent content={"Loading Page"} />;
+    return <LoadingComponent content={"Loading activities..."} />;
   return (
     <Grid>
       {/* the width of page = 16 */}

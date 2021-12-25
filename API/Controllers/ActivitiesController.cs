@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class Activites : BaseApiController
     {
         private readonly IMediator _mediator;
