@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+
 namespace Domain
 {
     public class Activity
@@ -13,5 +15,7 @@ namespace Domain
         public String Category { set; get; }
         public String City { set; get; }
         public String Venue { set; get; }
+        public bool IsCancelled { get; set; }
+        public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
     }
 }
