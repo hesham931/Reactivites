@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { Segment, Button, Header } from "semantic-ui-react";
-import { activity } from "../../../app/models/activity";
+import { ActivityFormValues } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
@@ -18,7 +18,6 @@ import MyDateInput from "../../../app/common/form/MyDateInput";
 export default observer(function ActivityForm() {
   const { activityStore } = useStore();
   const {
-    submiting,
     loadActivity,
     createActivity,
     EditActivity,
@@ -27,15 +26,7 @@ export default observer(function ActivityForm() {
 
   const history = useHistory();
 
-  const [Activity, setActivity] = React.useState<activity>({
-    id: "",
-    title: "",
-    date: null,
-    description: "",
-    category: "",
-    city: "",
-    venue: "",
-  });
+  const [Activity, setActivity] = React.useState<ActivityFormValues>(new ActivityFormValues());
 
   const { id } = useParams<{ id: string }>();
 
@@ -49,11 +40,11 @@ export default observer(function ActivityForm() {
   });
 
   useEffect(() => {
-    if (id) loadActivity(id).then((activity) => setActivity(activity!));
+    if (id) loadActivity(id).then((activity) => setActivity(new ActivityFormValues(activity)));
   }, [loadActivity, id]);
 
-  function handleForm(Activity: activity) {
-    if (Activity.id.length === 0) {
+  function handleForm(Activity: ActivityFormValues) {
+    if (!Activity.id) {
       const newActivity = {
         ...Activity,
         id: uuid(),
@@ -109,7 +100,7 @@ export default observer(function ActivityForm() {
 
             <Button
               disabled={!isValid || !dirty || isSubmitting}
-              loading={submiting}
+              loading={isSubmitting}
               floated="right"
               positive
               type="submit"
