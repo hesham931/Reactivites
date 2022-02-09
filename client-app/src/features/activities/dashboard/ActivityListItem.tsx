@@ -13,32 +13,43 @@ export default function ActivityListItem({ Activity }: Props) {
     return (
         <Segment.Group>
             <Segment>
-                {Activity.isCancelled && 
+                {Activity.isCancelled && (
                     <Label
                         attached="top"
-                        color='red'
-                        content='Cancelled'
-                        style={{textAlign: 'center'}}
+                        color="red"
+                        content="Cancelled"
+                        style={{ textAlign: "center" }}
                     />
-                }
+                )}
                 <Item.Group>
                     <Item>
-                        <Item.Image style={{marginBottom: 3}} size="tiny" circular src="/assets/user.png" />
+                        <Item.Image
+                            style={{ marginBottom: 3 }}
+                            size="tiny"
+                            circular
+                            src={Activity.host?.image || "/assets/user.png"}
+                        />
                         <Item.Content>
                             <Item.Header as={Link} to={`/activities/${Activity.id}`}>
                                 {Activity.title}
                             </Item.Header>
-                            <Item.Description>Hosted by {Activity.host?.displayName}</Item.Description>
+                            <Item.Description>
+                                Hosted by{" "}
+                                <Link to={`/profiles/${Activity.hostUsername}`}>
+                                    {" "}
+                                    {Activity.host?.displayName}{" "}
+                                </Link>
+                            </Item.Description>
                             {Activity.isHost && (
                                 <Item.Description>
-                                    <Label basic color='orange'>
+                                    <Label basic color="orange">
                                         You are hosting this activity
                                     </Label>
                                 </Item.Description>
                             )}
                             {Activity.isGoing && !Activity.isHost && (
                                 <Item.Description>
-                                    <Label basic color='green'>
+                                    <Label basic color="green">
                                         You are going to this activity
                                     </Label>
                                 </Item.Description>
@@ -49,7 +60,7 @@ export default function ActivityListItem({ Activity }: Props) {
             </Segment>
             <Segment>
                 <span>
-                    <Icon name="clock" /> {format(Activity.date!, 'dd MMM yyyy h:mm aa')}
+                    <Icon name="clock" /> {format(Activity.date!, "dd MMM yyyy h:mm aa")}
                     <Icon name="marker" /> {Activity.venue}
                 </span>
             </Segment>
