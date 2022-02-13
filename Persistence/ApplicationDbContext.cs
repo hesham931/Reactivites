@@ -11,6 +11,7 @@ namespace Persistence
         public DbSet<Activity> Activities { set; get; }
         public DbSet<ActivityAttendee> ActivityAttendee { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -28,6 +29,11 @@ namespace Persistence
             .HasOne(u => u.Activity)
             .WithMany(a => a.Attendees)
             .HasForeignKey(aa => aa.ActivityId);
+
+            builder.Entity<Comment>()
+                .HasOne(a => a.Activity)
+                .WithMany(c => c.Comments)
+                .OnDelete(DeleteBehavior.Cascade);
         }
         //this command will be used to create the first migrations(-p for the place of ApplicationDbContext)(-s for the place of startup class)
         //dotnet ef migrations add IniyialCreate -p .\Persistence\ -s .\API\
