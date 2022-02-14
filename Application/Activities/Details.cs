@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -20,9 +20,11 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Query, Result<ActivityDto>>
         {
             private readonly ApplicationDbContext _Db;
-        private readonly IMapper _mapper;
-            public Handler(ApplicationDbContext Db, IMapper mapper)
+            private readonly IMapper _mapper;
+            private readonly IUserAccessor _userAccessor;
+            public Handler(ApplicationDbContext Db, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _Db = Db;
             }
@@ -33,7 +35,8 @@ namespace Application.Activities
 
 
                 var activity =  await _Db.Activities
-                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                new {currentUsername = _userAccessor.GetUserName()})
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 
