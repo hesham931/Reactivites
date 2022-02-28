@@ -20,7 +20,7 @@ axios.interceptors.request.use(config => {
   return config;
 })
 axios.interceptors.response.use(async response => {
-  await sleep(2000);
+  if (process.env.NODE_ENV === 'development') await sleep(1000);
   const pagination = response.headers['pagination'];
   if (pagination) {
     response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -70,7 +70,8 @@ axios.interceptors.response.use(async response => {
   return Promise.reject(error);
 })//after the comma function will excute if there is any error
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+// axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 
 
