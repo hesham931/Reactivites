@@ -4,6 +4,6 @@ you can access the website using this link:
 https://reactivitiesforyou.herokuapp.com/
 
 
-example user:
-bob@test.com
-Pa$$w0rd
+example user:\n
+email: bob@test.com\n
+password: Pa$$w0rd
