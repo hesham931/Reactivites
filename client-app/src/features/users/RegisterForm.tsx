@@ -30,7 +30,7 @@ export default observer(function RegisterForm() {
                     <MyTextInput name="displayName" placeholder="Display Name" />
                     <MyTextInput name="userName" placeholder="User Name" />
                     <MyTextInput name="email" placeholder="Email" />
-                    <MyTextInput name="password" placeholder="Password" type="password" />
+                    <MyTextInput name="password" placeholder="Password(big,small letters,symbols and numbers)" type="password" />
                     <ErrorMessage
                         name="error"
                         render={() => (
